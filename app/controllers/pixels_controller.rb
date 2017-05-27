@@ -9,25 +9,23 @@ class PixelsController < ApplicationController
 
   # POST /pixels
   def create
-    Rails.logger.debug pixel_params.inspect
     rounded_lat = round_down(pixel_params["latitude"], Pixel::PRECISION)
     rounded_long = round_down(pixel_params["longitude"], Pixel::PRECISION)
+    @pixel = Pixel.first_or_initialize(:south => rounded_lat, :west => rounded_long)
     
-    @pixel = Pixel.new(
+    @pixel.update_attributes(
       {
         :south => rounded_lat,
         :north => rounded_lat + (10 ** -Pixel::PRECISION),
-        :east => rounded_long,
-        :west => rounded_long + (10 ** Pixel::PRECISION),
+        :west => rounded_long,
+        :east => rounded_long + (10 ** -Pixel::PRECISION),
         :colour => pixel_params["colour"]
       }
     )
 
-    if @pixel.save
-      render json: @pixel, status: :created, location: @pixel
-    else
-      render json: @pixel.errors, status: :unprocessable_entity
-    end
+    render json: @pixel, status: :created, location: @pixel
+  rescue
+    render json: @pixel.errors, status: :unprocessable_entity
   end
 
   private
