@@ -16,7 +16,7 @@ class PixelsController < ApplicationController
   def create
     rounded_lat = round_down(pixel_params["latitude"], Pixel::PRECISION)
     rounded_long = round_down(pixel_params["longitude"], Pixel::PRECISION)
-    @pixel = Pixel.first_or_initialize(:south => rounded_lat, :west => rounded_long)
+    @pixel = Pixel.find_or_initialize_by(:south => rounded_lat, :west => rounded_long)
     
     @pixel.update_attributes(
       {
