@@ -2,7 +2,12 @@ class PixelsController < ApplicationController
 
   # GET /pixels
   def index
-    @pixels = Pixel.all
+    last_updated_at = params[:last_updated_at]
+    if last_updated_at.present?
+      @pixels = Pixel.where("updated_at >= ?", Time.at(last_updated_at.to_i))
+    else
+      @pixels = Pixel.all
+    end
 
     render json: @pixels
   end
