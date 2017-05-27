@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
   private
 
   def return_user_for_valid_login_of(user)
-    render json: user.attributes.slice("token", "email")
+    render json: user.attributes.slice("token", "email", "id")
   end
 
   def allow_token_to_be_used_only_once_for(user)
