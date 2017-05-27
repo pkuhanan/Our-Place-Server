@@ -17,8 +17,7 @@ class PixelsController < ApplicationController
     rounded_lat = round_down(pixel_params["latitude"], Pixel::PRECISION)
     rounded_long = round_down(pixel_params["longitude"], Pixel::PRECISION)
     @pixel = Pixel.find_or_initialize_by(:south => rounded_lat, :west => rounded_long)
-    Rails.logger.debug rounded_lat
-    Rails.logger.debug rounded_long
+
     @pixel.update_attributes(
       {
         :south => rounded_lat.round(4),
